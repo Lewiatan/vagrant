@@ -1,9 +1,9 @@
 locale: pl_PL.UTF-8
 
-name: import
+name: app
 user: vagrant
 group: vagrant
-domain: import.dev
+domain: app.loc
 
 zsh_theme: robbyrussell
 
@@ -33,9 +33,19 @@ php:
         - bcmath
 
 mysql:
-    name: mozos
-    user: mozos
-    password: mozos
+    name: mysql_db_name
+    user: mysql_user_name
+    password: mysql_user_password
+
+postgres:
+    name: pgsql_db_name
+    user: pgsql_user_name
+    password: pgsql_user_password
+
+nodejs:
+    version: 8
+    global_packages:
+        - yarn
 
 redis_servers:
     - port: 6379

@@ -4,11 +4,12 @@
   become: true
   roles:
     - general
-    - ohmyzsh
-    - php-fpm
-    - php
-    - nginx
-    - redis
-    - mongodb
-    - rabbitmq
-    - composer
+#    - ohmyzsh
+#    - php-fpm
+#    - php
+#    - nginx
+#    - redis
+#    - mongodb
+#    - rabbitmq
+#    - composer
+    - nodejs

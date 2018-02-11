@@ -1,0 +1,28 @@
+- name: Download node installer
+  get_url:
+    url: https://deb.nodesource.com/setup_{{ nodejs.version }}.x
+    dest: /tmp/node.sh
+    mode: 777
+
+- name: Run node installer
+  command: /tmp/node.sh
+  become: yes
+
+- name: Install nodejs
+  apt:
+    name: nodejs
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: remove node installer
+  file:
+    path: /tmp/node.sh
+    state: absent
+  become: yes
+
+- name: install global npm packages
+  npm:
+    name: '{{ item }}'
+    global: yes
+  with_items: '{{ nodejs.global_packages }}'
