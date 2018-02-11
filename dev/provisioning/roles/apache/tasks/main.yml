@@ -1,0 +1,35 @@
+- name: install apache2 server
+  apt: name=apache2 state=latest update_cache=yes
+
+- name: enabled mod_rewrite
+  apache2_module: name=rewrite state=present
+  notify:
+    - restart apache2
+
+- name: render apache vhost
+  template: src=vhost.j2 dest=/etc/apache2/sites-available/{{ domain }}.conf
+
+- name: a2ensite {{ domain }}
+  command: a2ensite {{ domain }}
+  args:
+    creates: /etc/apache2/sites-enabled/{{ domain }}.conf
+  notify:
+    - restart apache2
+
+- name: run apache as vagrant user
+  lineinfile:
+    path: /etc/apache2/apache2.conf
+    regexp: '^User'
+    line: 'User vagrant'
+    backrefs: no
+  notify:
+    - restart apache2
+
+- name: run apache as vagrant group
+  lineinfile:
+    path: /etc/apache2/apache2.conf
+    regexp: '^Group'
+    line: 'Group vagrant'
+    backrefs: no
+  notify:
+    - restart apache2

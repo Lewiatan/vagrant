@@ -32,6 +32,11 @@ php:
         - dom
         - bcmath
 
+mysql:
+    name: mozos
+    user: mozos
+    password: mozos
+
 redis_servers:
     - port: 6379
       databases: 1

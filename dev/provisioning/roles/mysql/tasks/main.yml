@@ -1,0 +1,13 @@
+- name: install mysql server
+  apt: name=mysql-server state=latest
+
+- name: install python-mysqldb
+  apt: name=python-mysqldb state=present
+
+- name: create mysql user from apps
+  mysql_user: name={{ mysql.user }} password={{ mysql.password }} priv=*.*:ALL
+  become: yes
+
+- name: create database from apps
+  mysql_db: name={{ mysql.name }} encoding=utf8 state=present
+  become: yes
