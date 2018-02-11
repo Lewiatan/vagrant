@@ -1,0 +1,36 @@
+- name: Installing Zsh and git
+  apt: pkg=zsh state=latest
+  register: installation
+
+- name: Backing up existing ~/.zshrc
+  become: false
+  copy:
+    src: ~/.zshrc
+    dest: ~/.zshrc.backup
+  when: installation|success
+
+- name: Cloning  oh-my-zsh
+  become: false
+  git:
+    repo=https://github.com/robbyrussell/oh-my-zsh
+    dest=~/.oh-my-zsh
+  when: installation|success
+  register: cloning
+
+- name: Creating new ~/.zshrc
+  become: false
+  copy:
+    src=~/.oh-my-zsh/templates/zshrc.zsh-template
+    dest=~/.zshrc
+  when: cloning|success
+  register: config
+
+- name: Set zsh as default shell
+  user: name=vagrant shell=/usr/bin/zsh
+
+- name: Set oh-my-zsh theme
+  become: false
+  lineinfile:
+    path: ~/.zshrc
+    regexp: 'ZSH_THEME="'
+    line: 'ZSH_THEME="{{ zsh_theme }}"'

@@ -1,0 +1,10 @@
+[Unit]
+Description=PHP Daemon ({{ item.name }})
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/php{{ php.version }} -d "default_socket_timeout=-1" -f /vagrant/daemons/{{ item.name }}.php
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

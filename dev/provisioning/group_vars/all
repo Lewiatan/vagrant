@@ -1,0 +1,47 @@
+locale: pl_PL.UTF-8
+
+name: import
+user: vagrant
+group: vagrant
+domain: import.dev
+
+zsh_theme: robbyrussell
+
+tools:
+    - unzip
+    - mc
+    - vim
+    - htop
+
+deps:
+    - git
+    - curl
+
+php:
+    version: 7.1
+    modules:
+        - json
+        - xml
+        - mbstring
+        - intl
+        - opcache
+        - curl
+        - zip
+        - mongodb
+        - xdebug
+        - dom
+        - bcmath
+
+redis_servers:
+    - port: 6379
+      databases: 1
+    - port: 6380
+      databases: 1
+
+php_daemons:
+    - name: downloads
+      max_children: 5
+      idle_timeout: 10s
+    - name: parsers
+      max_children: 5
+      idle_timeout: 10s

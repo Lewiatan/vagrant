@@ -1,0 +1,9 @@
+- name: install composer
+  apt: name=composer state=present
+
+- name: install initial composer packages
+  composer:
+    command: install
+    working_dir: /vagrant
+    no_dev: no
+

@@ -1,0 +1,17 @@
+- name: generate the server locale
+  locale_gen: name={{ locale }} state=present
+
+- name: set locale
+  lineinfile: dest=/etc/default/locale regexp='^LANG' line='LANG={{ locale }}'
+
+- name: reload locale
+  raw: . /etc/default/locale
+
+- name: install tools
+  apt: name={{ item }}
+  with_items: '{{ tools }}'
+
+- name: Install dependencies
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=3600
+  with_items: '{{ deps }}'
+

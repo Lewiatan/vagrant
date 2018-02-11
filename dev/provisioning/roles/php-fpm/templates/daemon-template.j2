@@ -1,0 +1,17 @@
+[{{ item.name }}]
+
+user = {{ user }}
+group = {{ group }}
+
+listen = /run/php/php-{{ item.name }}-fpm.sock
+
+listen.owner = {{ user }}
+listen.group = www-data
+
+pm = ondemand
+
+pm.max_children = {{ item.max_children }}
+pm.process_idle_timeout = {{ item.idle_timeout }}
+
+access.log = /var/log/php-{{ item.name }}.access.log
+

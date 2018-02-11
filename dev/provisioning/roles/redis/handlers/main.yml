@@ -1,0 +1,3 @@
+- name: restart redis servers
+  service: name=redis_{{ item.port }} state=restarted
+  with_items: "{{ redis_servers }}"

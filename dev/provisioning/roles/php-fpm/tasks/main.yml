@@ -1,0 +1,24 @@
+- name: add php ppa
+  apt_repository: repo='ppa:ondrej/php' state=present
+
+- name: update apt cache
+  apt: update_cache=yes
+
+- name: install php{{php.version }}-fpm
+  apt: name=php{{ php.version }}-fpm state=present
+
+- name: delete default config
+  file: path=/etc/php/{{ php.version }}/fpm/pool.d/www.conf state=absent
+
+- name: render php fpm pools config
+  template: src=pool-template.j2 dest=/etc/php/{{ php.version }}/fpm/pool.d/{{ name }}.conf
+  notify: restart php-fpm
+
+- name: render php fpm daemons configs
+  template: src=daemon-template.j2 dest=/etc/php/{{ php.version }}/fpm/pool.d/{{ item.name }}.conf
+  with_items: "{{ php_daemons }}"
+  notify: restart php-fpm
+
+- name: add php daemons services to system
+  template: src=daemon-service.j2 dest=/etc/systemd/system/{{ name }}-{{ item.name }}.service
+  with_items: "{{ php_daemons }}"

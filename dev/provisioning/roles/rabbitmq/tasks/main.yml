@@ -1,0 +1,25 @@
+- name: install Erlang Solutions
+  apt:
+    deb: https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
+
+- name: install Erlang
+  apt: name=erlang state=present update_cache=yes
+  register: erlang
+
+- name: add RabbitMQ resource
+  apt_repository:
+    repo: deb https://dl.bintray.com/rabbitmq/debian xenial main
+    state: present
+  when: erlang|success
+  register: repo
+
+- name: add RabbitMQ public key
+  apt_key:
+    url: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+    state: present
+  when: repo|success
+  register: key
+
+- name: install Erlang
+  apt: name=rabbitmq-server state=present update_cache=yes
+

@@ -1,0 +1,43 @@
+- name: install redis server
+  apt: name=redis-server state=present
+
+- name: check redis default server configuration
+  stat: path=/etc/redis/redis.conf
+  register: redis_default_server_configuration
+
+- name: stop default server
+  service: name=redis-server state=stopped
+  when: redis_default_server_configuration.stat.exists
+
+- name: disable default redis server configuration
+  when: redis_default_server_configuration.stat.exists
+  command: mv /etc/redis/redis.conf /etc/redis/redis.conf.backup
+  become: yes
+
+- name: create redis servers configurations
+  template: src=redis.conf.j2 dest=/etc/redis/redis_{{ item.port }}.conf
+  with_items: "{{ redis_servers }}"
+
+- name: create redis working directories
+  file:
+      path: /var/lib/redis/redis_{{ item.port }}
+      state: directory
+      mode: 0755
+  with_items: "{{ redis_servers }}"
+  become: yes
+
+- name: check redis default server bootstrap
+  stat: path=/etc/init.d/redis-server
+  register: redis_default_server_bootstrap
+
+- name: disable default redis server bootstrap
+  file:
+        path: /etc/init.d/redis-server
+        state: absent
+  become: yes
+
+- name: create redis server bootstrap files
+  template: src=redis-server.j2 dest=/etc/init.d/redis_{{ item.port }} mode=0755
+  with_items: "{{ redis_servers }}"
+  become: yes
+  notify: restart redis servers
