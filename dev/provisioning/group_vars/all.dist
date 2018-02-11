@@ -4,6 +4,7 @@ name: app
 user: vagrant
 group: vagrant
 domain: app.loc
+server_root: /vagrant/public_html
 
 zsh_theme: robbyrussell
 
