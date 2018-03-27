@@ -32,6 +32,17 @@ php:
         - xdebug
         - dom
         - bcmath
+    settings:
+        - option: display_errors
+          value: 'On'
+        - option: memory_limit
+          value: 128M
+        - option: error_reporting
+          value: E_ALL & ~E_DEPRECATED & ~E_STRICT
+        - option: post_max_size
+          value: 1024M
+        - option: upload_max_filesize
+          value: 1024M
 
 mysql:
     name: mysql_db_name
