@@ -5,7 +5,7 @@ Vagrant.configure(2) do |config|
 		vagrant.vm.hostname = "vagrant.loc"
 		vagrant.vm.network :private_network, ip: "192.168.100.10"
 
-		import.vm.provision :ansible do |ansible|
+		vagrant.vm.provision :ansible do |ansible|
 			ansible.playbook = "dev/provisioning/playbook.yml"
 		end
 	end
